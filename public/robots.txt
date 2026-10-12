@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /cart
+Disallow: /checkout
+Disallow: /login
+Disallow: /register
+Disallow: /change-password
+
+Sitemap: https://www.saithchemicals.com/sitemap.xml
+Host: https://www.saithchemicals.com
