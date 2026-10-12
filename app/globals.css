@@ -1,0 +1,189 @@
+/* Theme + utilities only — skip Tailwind preflight so Bootstrap/icon layouts match Vite */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+:root {
+  --brand-primary: #E86C24;
+  --brand-primary-hover: #D15B17;
+  --brand-charcoal: #2C2C2E;
+  --brand-charcoal-deep: #1C1C1E;
+  --brand-bg: #F8F9FA;
+  --brand-surface: #FFFFFF;
+  --brand-text: #2C2C2E;
+  --brand-muted: #6C757D;
+  --brand-border: #E5E7EB;
+  --brand-shadow: 0 12px 35px -16px rgba(44, 44, 46, 0.22);
+  --background: var(--brand-bg);
+  --foreground: var(--brand-text);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-primary-hover: var(--brand-primary-hover);
+  --color-brand-charcoal: var(--brand-charcoal);
+  --color-brand-charcoal-deep: var(--brand-charcoal-deep);
+  --color-brand-background: var(--brand-bg);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-text: var(--brand-text);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-border: var(--brand-border);
+  --font-sans: var(--font-inter);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--brand-bg);
+  color: var(--brand-text);
+  font-family: var(--font-inter), "Inter", "Poppins", sans-serif;
+}
+
+/* Match Vite Frontend/src/index.css storefront container spacing */
+.container {
+  max-width: 100%;
+  padding: 0 40px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(232, 108, 36, 0.18);
+}
+
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:hover {
+  background: var(--brand-primary) !important;
+  border-color: var(--brand-primary) !important;
+  color: #fff !important;
+}
+
+.btn-outline-secondary,
+.btn-outline-dark {
+  border-color: var(--brand-charcoal) !important;
+  color: var(--brand-charcoal) !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-dark:hover {
+  background: var(--brand-charcoal) !important;
+  color: #fff !important;
+}
+
+/* Phase 0/1 scaffold placeholder styles */
+.phase-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(160deg, #f8f9fa 0%, #fff7f0 45%, #ffffff 100%);
+}
+
+.phase-shell__header {
+  border-bottom: 1px solid var(--brand-border);
+  background: var(--brand-surface);
+  padding: 1rem 1.5rem;
+}
+
+.phase-shell__brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--brand-charcoal);
+  letter-spacing: -0.02em;
+}
+
+.phase-shell__brand span {
+  color: var(--brand-primary);
+}
+
+.phase-shell__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 0.75rem;
+}
+
+.phase-shell__nav a {
+  color: var(--brand-charcoal);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.phase-shell__nav a:hover {
+  color: var(--brand-primary);
+}
+
+.phase-shell__main {
+  flex: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  width: 100%;
+}
+
+.phase-shell__badge {
+  display: inline-block;
+  background: rgba(232, 108, 36, 0.12);
+  color: var(--brand-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.phase-shell__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--brand-charcoal);
+  margin-bottom: 0.75rem;
+}
+
+.phase-shell__text {
+  color: var(--brand-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.phase-shell__meta {
+  background: var(--brand-surface);
+  border: 1px solid var(--brand-border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  color: var(--brand-charcoal);
+}
+
+/* Storefront chrome styles live in styles/Topbar.css, SideDrawer.css, Footer.css */

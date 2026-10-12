@@ -1,0 +1,75 @@
+.return-policy-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, #fff7ed 0%, #f8fafc 45%, #eef2f7 100%);
+    color: #1c1c1e;
+}
+
+.return-policy-page main { flex: 1; }
+
+.return-policy-hero {
+    background: linear-gradient(120deg, #1c1c1e 0%, #2c2c2e 70%, #51301f 100%);
+    color: #fff;
+    padding: 72px 0 78px;
+    position: relative;
+    overflow: hidden;
+}
+
+.return-policy-hero::after {
+    content: '';
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    right: 8%;
+    top: -150px;
+    border: 1px solid rgba(232, 108, 36, 0.35);
+    transform: rotate(45deg);
+}
+
+.return-policy-hero-content { position: relative; z-index: 1; max-width: 720px; }
+.return-policy-eyebrow, .return-policy-kicker {
+    color: #e86c24;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+}
+
+.return-policy-eyebrow { display: inline-flex; align-items: center; gap: 8px; }
+.return-policy-hero h1 { font-size: clamp(2.2rem, 5vw, 4rem); margin: 18px 0 14px; font-weight: 800; }
+.return-policy-hero p { color: #e5e7eb; font-size: 1.1rem; max-width: 580px; margin: 0 0 22px; }
+.return-policy-updated { color: #bfc3c8; font-size: 13px; }
+
+.return-policy-content { padding-top: 66px; padding-bottom: 76px; }
+.return-policy-intro { max-width: 680px; margin-bottom: 30px; }
+.return-policy-intro h2, .return-policy-contact h2 { color: #111827; font-size: clamp(1.6rem, 3vw, 2.25rem); font-weight: 800; margin: 10px 0; }
+.return-policy-intro p, .return-policy-contact p { color: #596273; line-height: 1.7; margin: 0; }
+
+.return-policy-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.return-policy-card { background: rgba(255, 255, 255, 0.88); border: 1px solid #e5e7eb; border-top: 3px solid #e86c24; padding: 28px; min-height: 220px; box-shadow: 0 12px 35px -22px rgba(44, 44, 46, 0.4); }
+.return-policy-card-featured { background: linear-gradient(135deg, #fff1e7, #fff); }
+.return-policy-card-refund { background: #2c2c2e; color: #fff; border-top-color: #f29a61; }
+.return-policy-card-refund h3 { color: #fff; }
+.return-policy-card-refund p { color: #d5d7da; }
+.return-policy-number { color: #e86c24; font-size: 12px; font-weight: 900; letter-spacing: 1px; }
+.return-policy-card h3 { color: #1c1c1e; font-size: 1.25rem; margin: 12px 0; font-weight: 800; }
+.return-policy-card p { color: #596273; line-height: 1.75; margin: 0; }
+.return-policy-card ul { list-style: none; padding: 0; margin: 0; }
+.return-policy-card li { color: #596273; display: flex; gap: 10px; line-height: 1.65; margin-bottom: 13px; }
+.return-policy-card li svg { color: #e86c24; flex: 0 0 auto; margin-top: 4px; }
+
+.return-policy-contact { display: flex; justify-content: space-between; gap: 30px; align-items: center; margin-top: 30px; padding: 30px; background: #fff; border-left: 4px solid #e86c24; box-shadow: 0 12px 35px -24px rgba(44, 44, 46, 0.45); }
+.return-policy-contact-links { display: flex; flex-direction: column; gap: 10px; min-width: 270px; }
+.return-policy-contact-links a, .return-policy-contact-links span { color: #596273; display: flex; align-items: center; gap: 10px; font-size: 14px; text-decoration: none; }
+.return-policy-contact-links a:hover { color: #e86c24; }
+.return-policy-contact-links svg { color: #e86c24; }
+
+@media (max-width: 767px) {
+    .return-policy-hero { padding: 52px 0 58px; }
+    .return-policy-content { padding-top: 46px; padding-bottom: 56px; }
+    .return-policy-grid { grid-template-columns: 1fr; }
+    .return-policy-card { min-height: auto; padding: 24px; }
+    .return-policy-contact { align-items: flex-start; flex-direction: column; padding: 24px; }
+    .return-policy-contact-links { min-width: 0; width: 100%; }
+}
