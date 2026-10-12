@@ -129,6 +129,79 @@
   font-size: 1rem;
 }
 
+/* --- FAQ (GEO / AEO) --- */
+.faq-card {
+  background: var(--ts-white);
+  padding: 20px;
+  border-radius: 18px;
+  border-left: 5px solid var(--ts-cyan);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faq-item {
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.faq-question {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  font-weight: 700;
+  color: var(--ts-navy, #1c1c1e);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.faq-question::-webkit-details-marker {
+  display: none;
+}
+
+.faq-question::after {
+  content: '+';
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(232, 108, 36, 0.1);
+  color: var(--ts-cyan, #e86c24);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.faq-item[open] .faq-question::after {
+  content: '−';
+  background: var(--ts-cyan, #e86c24);
+  color: #fff;
+}
+
+.faq-answer {
+  padding: 0 16px 16px;
+}
+
+.faq-answer p {
+  margin: 0;
+  color: var(--ts-text-gray, #64748b);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
 /* --- Action Buttons --- */
 .action-row {
   display: flex;

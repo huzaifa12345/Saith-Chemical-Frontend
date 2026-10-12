@@ -6,6 +6,7 @@ import ProductPageChrome from '@/components/product/ProductPageChrome';
 import ProductJsonLd from '@/components/product/ProductJsonLd';
 import ProductInfoSSR from '@/components/product/ProductInfoSSR';
 import ProductSpecs from '@/components/product/ProductSpecs';
+import ProductFaq from '@/components/product/ProductFaq';
 import ProductGallery from '@/components/product/ProductGallery';
 import ProductPurchaseActions from '@/components/product/ProductPurchaseActions';
 import ProductReviews from '@/components/product/ProductReviews';
@@ -96,7 +97,8 @@ export default async function ProductPage({ params }) {
             </div>
           </div>
 
-          {/* Client: review form + list (hydrated from SSR initialReviews) */}
+          {/* Below buy buttons — FAQ then reviews */}
+          <ProductFaq product={product} />
           <ProductReviews productId={product.id} initialReviews={reviews} />
         </main>
       </ProductPageChrome>
