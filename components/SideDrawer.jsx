@@ -16,6 +16,7 @@ import {
 import { useAuth } from '@/context/AuthContext';
 import { useLogo } from '@/context/LogoContext';
 import { themeApi } from '@/lib/api-client';
+import { categoryPath } from '@/lib/slug';
 import '@/styles/SideDrawer.css';
 
 const SideDrawer = ({ isOpen, onClose }) => {
@@ -102,7 +103,7 @@ const SideDrawer = ({ isOpen, onClose }) => {
                       key={category.id}
                       className="cat-item"
                       onClick={() => {
-                        router.push(`/category/${category.id}`);
+                        router.push(categoryPath(category));
                         onClose();
                       }}
                     >

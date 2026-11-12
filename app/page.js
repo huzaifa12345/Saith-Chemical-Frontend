@@ -1,22 +1,38 @@
 import HomeView from '@/components/home/HomeView';
+import OrganizationJsonLd from '@/components/seo/OrganizationJsonLd';
 import { getHomePageData } from '@/lib/api-server';
-import { SITE_NAME, SITE_URL } from '@/lib/seo';
+import { SITE_NAME, SITE_URL, absoluteUrl } from '@/lib/seo';
+
+const HOME_TITLE =
+  'Saith Chemical – Dishwash Bar & Washing Powder in Lahore';
+const HOME_DESC =
+  'Buy Grace Plus dishwash bars and washing powder from Saith Chemical in Lahore. Quality home-care detergents with fast delivery across Pakistan.';
 
 export const metadata = {
   title: {
-    absolute: `${SITE_NAME} | Quality Detergents & Cleaning Chemicals`,
+    absolute: HOME_TITLE,
   },
-  description:
-    'Shop home cleaning detergents, chemicals, and supplies directly from Saith Chemical.',
+  description: HOME_DESC,
   alternates: { canonical: SITE_URL },
   openGraph: {
-    title: `${SITE_NAME} | Quality Detergents & Cleaning Chemicals`,
-    description:
-      'Shop home cleaning detergents, chemicals, and supplies directly from Saith Chemical.',
+    title: HOME_TITLE,
+    description: HOME_DESC,
     url: SITE_URL,
     siteName: SITE_NAME,
     type: 'website',
     locale: 'en_PK',
+    images: [
+      {
+        url: absoluteUrl('/SaithChemicalLogo.png'),
+        alt: `${SITE_NAME} logo`,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: HOME_TITLE,
+    description: HOME_DESC,
+    images: [absoluteUrl('/SaithChemicalLogo.png')],
   },
 };
 
@@ -35,10 +51,13 @@ export default async function HomePage() {
   }
 
   return (
-    <HomeView
-      heroSlides={heroSlides}
-      categories={categories}
-      productsByCategory={productsByCategory}
-    />
+    <>
+      <OrganizationJsonLd />
+      <HomeView
+        heroSlides={heroSlides}
+        categories={categories}
+        productsByCategory={productsByCategory}
+      />
+    </>
   );
 }

@@ -2,5 +2,13 @@
   "framework": "nextjs",
   "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "regions": ["iad1"]
+  "regions": ["iad1"],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "saithchemicals.com" }],
+      "destination": "https://www.saithchemicals.com/:path*",
+      "permanent": true
+    }
+  ]
 }

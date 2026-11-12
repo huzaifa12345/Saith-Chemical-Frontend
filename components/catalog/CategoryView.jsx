@@ -12,6 +12,7 @@ import '@/styles/DynamicCategory.css';
 
 export default function CategoryView({
   categorySlug,
+  categoryPathSlug,
   initialCategory = null,
   initialProducts = [],
   initialTotalPages = 1,
@@ -92,7 +93,10 @@ export default function CategoryView({
       <div className="ct-category-page-wrapper ap-page-wrapper">
         <div className="container pt-4">
           <h1 className="h3 fw-bold mb-1">
-            {category?.name || 'Category'}
+            {category?.name ||
+              (categoryPathSlug
+                ? categoryPathSlug.replace(/-/g, ' ')
+                : 'Category')}
           </h1>
           {category?.description && (
             <p className="text-muted mb-0">{category.description}</p>

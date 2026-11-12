@@ -4,7 +4,7 @@ export const metadata = {
   title: {
     absolute: 'Product Not Found | Saith Chemical',
   },
-  robots: { index: false, follow: true },
+  robots: { index: false, follow: false },
 };
 
 export default function ProductNotFound() {

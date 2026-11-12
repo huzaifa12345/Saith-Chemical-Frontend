@@ -17,6 +17,8 @@ import {
 import toast from 'react-hot-toast';
 import { useCart } from '@/context/CartContext';
 import ProductPageChrome from '@/components/product/ProductPageChrome';
+import { categoryPath } from '@/lib/slug';
+import { getCardImage } from '@/lib/images';
 import '@/styles/ThemeHome.css';
 
 export default function HomeView({
@@ -104,10 +106,16 @@ export default function HomeView({
             <div className="hero-grid">
               <div className="hero-info-col">
                 <span className="hero-tag">
-                  Premium Quality • Professional Grade
+                  Grace Plus • Dishwash &amp; Laundry
                 </span>
-                <h1 className="hero-title">{slide.title}</h1>
-                <p className="hero-desc">{slide.description}</p>
+                <h1 className="hero-title">
+                  Saith Chemical – Dishwash Bar &amp; Washing Powder in Lahore
+                </h1>
+                <p className="hero-desc">
+                  Shop Grace Plus dishwash bars and washing powder from Saith
+                  Chemical in Lahore. Reliable cleaning power for homes and
+                  shops — fast delivery across Pakistan.
+                </p>
                 <div className="hero-btns">
                   <Link href="/all-products" className="btn-main">
                     Shop Now <FaArrowRight />
@@ -121,7 +129,11 @@ export default function HomeView({
               <div className="hero-visual-col">
                 <div className="image-frame">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={slide.image} className="hero-img" alt={slide.title} />
+                  <img
+                    src={slide.image}
+                    className="hero-img"
+                    alt="Saith Chemical Grace Plus dishwash bar and washing powder"
+                  />
                   <div className="floating-badge">
                     <FaStar /> <span>#1 in Lahore</span>
                   </div>
@@ -152,84 +164,81 @@ export default function HomeView({
                   <h2 className="group-title">{category.name}</h2>
                   <div className="title-line"></div>
                 </div>
-                <Link href={`/category/${category.id}`} className="view-link">
+                <Link href={categoryPath(category)} className="view-link">
                   Explore All
                 </Link>
               </div>
 
               <div className="product-grid-modern">
-                {(productsByCategory[category.id] || []).map((product) => (
-                  <div key={product.id} className="item-card">
-                    <div className="item-thumb">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={
-                          product.images?.[0] ||
-                          product.image_url ||
-                          '/placeholder.png'
-                        }
-                        alt={product.name}
-                      />
-                      {product.discount_price &&
-                        product.discount_price < product.price && (
-                          <div className="discount-badge-image">
-                            -
-                            {Math.round(
-                              ((product.price - product.discount_price) /
-                                product.price) *
-                                100
-                            )}
-                            %
-                          </div>
-                        )}
-                      <div className="item-overlay">
-                        <button
-                          type="button"
-                          onClick={() => handleAddToCart(product)}
-                          className="circle-btn"
-                        >
-                          <FaShoppingCart />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            router.push(
-                              `/product/${product.barcode || product.id}`
-                            )
-                          }
-                          className="circle-btn"
-                        >
-                          <FaSearch />
-                        </button>
-                      </div>
-                    </div>
-                    <div className="item-details">
-                      <h3 className="item-name">{product.name}</h3>
-                      <div className="item-pricing">
+                {(productsByCategory[category.id] || []).map((product) => {
+                  const href = `/product/${product.barcode || product.id}`;
+                  const img = getCardImage(product);
+                  return (
+                    <div key={product.id} className="item-card">
+                      <Link href={href} className="item-thumb item-thumb-link">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={img} alt={product.name} loading="lazy" />
                         {product.discount_price &&
-                        product.discount_price < product.price ? (
-                          <>
-                            <span className="price-original">
+                          product.discount_price < product.price && (
+                            <div className="discount-badge-image">
+                              -
+                              {Math.round(
+                                ((product.price - product.discount_price) /
+                                  product.price) *
+                                  100
+                              )}
+                              %
+                            </div>
+                          )}
+                        <div className="item-overlay">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleAddToCart(product);
+                            }}
+                            className="circle-btn"
+                            aria-label="Add to cart"
+                          >
+                            <FaShoppingCart />
+                          </button>
+                          <span className="circle-btn" aria-hidden="true">
+                            <FaSearch />
+                          </span>
+                        </div>
+                      </Link>
+                      <div className="item-details">
+                        <h3 className="item-name">
+                          <Link href={href}>{product.name}</Link>
+                        </h3>
+                        <div className="item-pricing">
+                          {product.discount_price &&
+                          product.discount_price < product.price ? (
+                            <>
+                              <span className="price-original">
+                                Rs. {product.price}
+                              </span>
+                              <span className="price-now">
+                                Rs. {product.discount_price}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="price-now">
                               Rs. {product.price}
                             </span>
-                            <span className="price-now">
-                              Rs. {product.discount_price}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="price-now">Rs. {product.price}</span>
-                        )}
+                          )}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleBuyNow(product)}
+                          className="card-buy-btn"
+                        >
+                          Buy Now
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleBuyNow(product)}
-                        className="card-buy-btn"
-                      >
-                        Buy Now
-                      </button>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ))}

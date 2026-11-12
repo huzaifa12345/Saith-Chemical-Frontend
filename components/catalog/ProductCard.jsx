@@ -1,19 +1,23 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ShoppingCart, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useCart } from '@/context/CartContext';
+import { getCardImage } from '@/lib/images';
 
 export default function ProductCard({ product, viewMode = 'grid' }) {
   const router = useRouter();
   const { addToCart } = useCart();
   const href = `/product/${product.barcode || product.id}`;
+  const imageSrc = getCardImage(product);
   const hasDiscount =
     product.discount_price &&
     Number(product.discount_price) < Number(product.price);
 
   const handleAddToCart = (e) => {
+    e?.preventDefault?.();
     e?.stopPropagation?.();
     addToCart(
       { ...product, price: product.discount_price || product.price },
@@ -23,6 +27,7 @@ export default function ProductCard({ product, viewMode = 'grid' }) {
   };
 
   const handleBuyNow = (e) => {
+    e?.preventDefault?.();
     e?.stopPropagation?.();
     addToCart(
       { ...product, price: product.discount_price || product.price },
@@ -33,12 +38,9 @@ export default function ProductCard({ product, viewMode = 'grid' }) {
 
   return (
     <div className={`item-card ${viewMode === 'list' ? 'list-card' : ''}`}>
-      <div className="item-thumb" onClick={() => router.push(href)} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && router.push(href)}>
+      <Link href={href} className="item-thumb item-thumb-link">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={product.images?.[0] || product.image_url || '/placeholder.png'}
-          alt={product.name}
-        />
+        <img src={imageSrc} alt={product.name} loading="lazy" width={600} height={600} />
         {hasDiscount && (
           <div className="discount-badge-image">
             -
@@ -57,21 +59,16 @@ export default function ProductCard({ product, viewMode = 'grid' }) {
           >
             <ShoppingCart />
           </button>
-          <button
-            type="button"
-            onClick={() => router.push(href)}
-            className="circle-btn"
-            aria-label="View product"
-          >
+          <span className="circle-btn" aria-hidden="true">
             <ArrowRight />
-          </button>
+          </span>
         </div>
-      </div>
+      </Link>
 
       <div className="item-details">
         <div className="item-meta">
           <h5 className="item-name" title={product.name}>
-            {product.name}
+            <Link href={href}>{product.name}</Link>
           </h5>
           <div className="item-pricing">
             {hasDiscount ? (

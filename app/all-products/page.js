@@ -4,9 +4,9 @@ import { getProducts } from '@/lib/api-server';
 import { buildPageMetadata } from '@/lib/seo';
 
 export const metadata = buildPageMetadata({
-  title: 'All Products',
+  title: 'All Products – Saith Chemical',
   description:
-    'Browse all Saith Chemical home-care and cleaning products. Best prices in Pakistan.',
+    'Browse all Saith Chemical Grace Plus dishwash bars, washing powder and home-care products. Best prices in Lahore, Pakistan.',
   path: '/all-products',
 });
 

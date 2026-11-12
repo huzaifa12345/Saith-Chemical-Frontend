@@ -239,7 +239,7 @@ export default function RegisterForm() {
               />
               <span style={{ fontSize: '0.85rem' }}>
                 I agree to the{' '}
-                <Link href="/return-policy" className="lg-forgot">
+                <Link href="/terms" className="lg-forgot">
                   Terms
                 </Link>{' '}
                 &amp; Return Policy

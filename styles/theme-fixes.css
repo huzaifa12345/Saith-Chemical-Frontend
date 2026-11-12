@@ -1,0 +1,16 @@
+/* SEO: crawlable product card links keep existing card layout */
+.item-thumb-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.item-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.item-name a:hover {
+  color: var(--brand-primary, #e86c24);
+}

@@ -1,4 +1,4 @@
-import { getStockQuantity } from '@/lib/schema';
+import { getStockQuantity, PRODUCT_BRAND } from '@/lib/schema';
 
 /**
  * Server Component — technical specs table for SEO / GEO / AEO.
@@ -18,15 +18,7 @@ export default function ProductSpecs({ product, isAvailable }) {
             <th scope="row" className="bg-light w-35">
               Brand
             </th>
-            <td>Saith Chemical</td>
-          </tr>
-          <tr>
-            <th scope="row" className="bg-light">
-              Barcode (GTIN)
-            </th>
-            <td>
-              <code>{product.barcode || 'N/A'}</code>
-            </td>
+            <td>{PRODUCT_BRAND}</td>
           </tr>
           <tr>
             <th scope="row" className="bg-light">

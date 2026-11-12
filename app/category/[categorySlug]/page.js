@@ -1,57 +1,72 @@
+import { notFound, permanentRedirect } from 'next/navigation';
 import CategoryView from '@/components/catalog/CategoryView';
 import {
-  getCategoryById,
   getProductsByCategory,
+  resolveCategory,
 } from '@/lib/api-server';
 import { buildPageMetadata } from '@/lib/seo';
+import { categoryPath, slugify } from '@/lib/slug';
 
 export async function generateMetadata({ params }) {
   const { categorySlug } = await params;
   try {
-    const category = await getCategoryById(categorySlug);
+    const category = await resolveCategory(categorySlug);
     if (category?.name) {
       return buildPageMetadata({
         title: category.name,
         description:
           category.description ||
-          `Shop ${category.name} products from Saith Chemical.`,
-        path: `/category/${categorySlug}`,
+          `Shop ${category.name} products from Saith Chemical — dishwash, detergents and home care in Lahore.`,
+        path: categoryPath(category),
       });
     }
   } catch {
-    // fall through
+    // fall through to noindex 404 metadata
   }
-  const label = decodeURIComponent(categorySlug).replace(/-/g, ' ');
-  return buildPageMetadata({
-    title: label,
-    description: `Shop ${label} products from Saith Chemical.`,
-    path: `/category/${categorySlug}`,
-  });
+  return {
+    title: 'Category Not Found',
+    description: 'This category does not exist on Saith Chemical.',
+    robots: { index: false, follow: false },
+  };
 }
 
 export default async function CategoryPage({ params }) {
   const { categorySlug } = await params;
+  const category = await resolveCategory(categorySlug).catch(() => null);
 
-  let initialCategory = null;
+  if (!category) {
+    notFound();
+  }
+
+  // 301 numeric /category/1 → /category/dishwash-soap
+  if (/^\d+$/.test(String(categorySlug))) {
+    permanentRedirect(categoryPath(category));
+  }
+
+  // Canonicalize mismatched slug spelling
+  const canonicalSlug = slugify(category.name);
+  if (canonicalSlug && slugify(categorySlug) !== canonicalSlug) {
+    permanentRedirect(`/category/${canonicalSlug}`);
+  }
+
   let initialProducts = [];
   let initialTotalPages = 1;
-
   try {
-    const [category, productsData] = await Promise.all([
-      getCategoryById(categorySlug),
-      getProductsByCategory(categorySlug, { page: 1, limit: 12 }),
-    ]);
-    initialCategory = category;
+    const productsData = await getProductsByCategory(category.id, {
+      page: 1,
+      limit: 12,
+    });
     initialProducts = productsData.products || [];
     initialTotalPages = productsData.pagination?.pages || 1;
   } catch {
-    // Client retries
+    // Client can retry
   }
 
   return (
     <CategoryView
-      categorySlug={categorySlug}
-      initialCategory={initialCategory}
+      categorySlug={String(category.id)}
+      categoryPathSlug={canonicalSlug}
+      initialCategory={category}
       initialProducts={initialProducts}
       initialTotalPages={initialTotalPages}
     />

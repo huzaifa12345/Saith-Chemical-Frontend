@@ -65,19 +65,38 @@ const ThemeFooter = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/return-policy" onClick={handleScrollTop}>
-                  <FaChevronRight /> Return Policy
-                </Link>
-              </li>
-              <li>
                 <Link href="/all-products" onClick={handleScrollTop}>
-                  <FaChevronRight />
-                  All Products
+                  <FaChevronRight /> All Products
                 </Link>
               </li>
               <li>
                 <Link href="/about" onClick={handleScrollTop}>
                   <FaChevronRight /> Our Story
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" onClick={handleScrollTop}>
+                  <FaChevronRight /> Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/shipping-policy" onClick={handleScrollTop}>
+                  <FaChevronRight /> Shipping Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/return-policy" onClick={handleScrollTop}>
+                  <FaChevronRight /> Return Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy-policy" onClick={handleScrollTop}>
+                  <FaChevronRight /> Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" onClick={handleScrollTop}>
+                  <FaChevronRight /> Terms
                 </Link>
               </li>
               <li>
@@ -104,8 +123,8 @@ const ThemeFooter = () => {
                 <div>
                   <small>Visit Store</small>
                   <p>
-                    Saith Chemical, R/O Shop No.D-2490 Near Mosque Qadir, koocha
-                    Dogran Alam Market, Lahore, Pakistan
+                    Shop No. D-2490, Near Mosque Qadir, Koocha Dogran, Alam
+                    Market, Lahore, Pakistan
                   </p>
                 </div>
               </div>

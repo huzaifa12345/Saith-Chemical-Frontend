@@ -14,6 +14,17 @@ const nextConfig = {
       { protocol: 'https', hostname: 'saith-chemical-e-com.vercel.app' },
     ],
   },
+  async redirects() {
+    return [
+      // Apex → www (single 301 hop). Also set Primary Domain = www in Vercel.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'saithchemicals.com' }],
+        destination: 'https://www.saithchemicals.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
   turbopack: {
     root: __dirname,
     rules: {

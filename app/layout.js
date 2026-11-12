@@ -49,9 +49,12 @@ export const metadata = {
     follow: true,
   },
   icons: {
-    icon: [{ url: '/SaithChemicalLogo.png', type: 'image/png' }],
-    shortcut: '/SaithChemicalLogo.png',
-    apple: '/SaithChemicalLogo.png',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
 };
 
