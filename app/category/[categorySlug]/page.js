@@ -24,9 +24,11 @@ export async function generateMetadata({ params }) {
     // fall through to noindex 404 metadata
   }
   return {
-    title: 'Category Not Found',
+    title: {
+      absolute: 'Category Not Found | Saith Chemical',
+    },
     description: 'This category does not exist on Saith Chemical.',
-    robots: { index: false, follow: false },
+    robots: 'noindex, nofollow',
   };
 }
 

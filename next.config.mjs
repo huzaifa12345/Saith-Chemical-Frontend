@@ -6,6 +6,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Classic App Router SSR (Express-backed API).
+  trailingSlash: false,
+  // Let middleware do one-hop /category/1/ → /category/slug (avoid 308 then 301)
+  skipTrailingSlashRedirect: true,
+  // Full-document 404 so we control a single robots meta (no duplicate noindex)
+  experimental: {
+    globalNotFound: true,
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'res.cloudinary.com' },

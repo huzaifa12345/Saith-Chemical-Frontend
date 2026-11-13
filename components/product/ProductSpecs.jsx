@@ -1,12 +1,10 @@
-import { getStockQuantity, PRODUCT_BRAND } from '@/lib/schema';
+import { PRODUCT_BRAND } from '@/lib/schema';
 
 /**
  * Server Component — technical specs table for SEO / GEO / AEO.
  * Must stay server-rendered (do not mark 'use client').
  */
 export default function ProductSpecs({ product, isAvailable }) {
-  const stockQty = getStockQuantity(product);
-
   return (
     <section className="spec-card mb-4" aria-labelledby="product-specs-heading">
       <h2 id="product-specs-heading" className="h5 text-navy fw-bold mb-3">
@@ -40,9 +38,7 @@ export default function ProductSpecs({ product, isAvailable }) {
             </th>
             <td>
               {isAvailable
-                ? `In Stock (Ready to Ship)${
-                    stockQty > 0 ? ` — ${stockQty} units` : ''
-                  }`
+                ? 'In Stock (Ready to Ship) — 20+ units'
                 : 'Out of Stock'}
             </td>
           </tr>

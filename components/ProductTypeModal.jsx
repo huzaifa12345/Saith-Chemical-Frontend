@@ -17,7 +17,8 @@ const ProductModal = ({
   uploadedImages, 
   uploadingImages, 
   handleImageUpload, 
-  removeUploadedImage, 
+  removeUploadedImage,
+  setCoverImage,
   handleSaveProduct
 }) => {
   return (
@@ -210,21 +211,79 @@ const ProductModal = ({
                         </label>
                       </div>
 
-                      {/* Image Preview Grid */}
+                      {/* Image Preview Grid — delete + set cover */}
                       <div className="row g-2">
                         {uploadedImages.map((img, idx) => (
-                          <div key={idx} className="col-4">
-                            <div className="position-relative rounded overflow-hidden shadow-sm" style={{ height: '70px', border: '1px solid #e2e8f0' }}>
-                              <img src={img} alt="Preview" className="w-100 h-100" style={{ objectFit: 'cover' }} />
-                              <button 
+                          <div key={`${img}-${idx}`} className="col-4">
+                            <div
+                              className="position-relative rounded overflow-hidden shadow-sm"
+                              style={{
+                                height: '90px',
+                                border:
+                                  idx === 0
+                                    ? '2px solid #e86c24'
+                                    : '1px solid #e2e8f0',
+                              }}
+                            >
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={img}
+                                alt={`Product ${idx + 1}`}
+                                className="w-100 h-100"
+                                style={{ objectFit: 'cover' }}
+                              />
+                              {idx === 0 && (
+                                <span
+                                  className="position-absolute bottom-0 start-0 m-1 px-1 fw-bold text-white"
+                                  style={{
+                                    fontSize: '9px',
+                                    background: '#e86c24',
+                                    borderRadius: '4px',
+                                  }}
+                                >
+                                  COVER
+                                </span>
+                              )}
+                              <button
+                                type="button"
                                 className="btn btn-danger p-0 position-absolute top-0 end-0 m-1 d-flex align-items-center justify-content-center"
                                 onClick={() => removeUploadedImage(idx)}
-                                style={{ width: '18px', height: '18px', borderRadius: '4px', fontSize: '10px' }}
-                              >×</button>
+                                title="Delete image"
+                                style={{
+                                  width: '20px',
+                                  height: '20px',
+                                  borderRadius: '4px',
+                                  fontSize: '11px',
+                                }}
+                              >
+                                ×
+                              </button>
+                              {idx !== 0 && typeof setCoverImage === 'function' && (
+                                <button
+                                  type="button"
+                                  className="btn btn-dark p-0 position-absolute top-0 start-0 m-1 px-1"
+                                  onClick={() => setCoverImage(idx)}
+                                  title="Set as cover image"
+                                  style={{
+                                    fontSize: '8px',
+                                    lineHeight: 1.2,
+                                    borderRadius: '4px',
+                                  }}
+                                >
+                                  Cover
+                                </button>
+                              )}
                             </div>
                           </div>
                         ))}
                       </div>
+                      {uploadedImages.length > 0 && (
+                        <p className="text-muted mb-0 mt-2" style={{ fontSize: '0.7rem' }}>
+                          First image is the cover. Click <strong>Cover</strong> on
+                          another image to make it the main product photo, or × to
+                          delete.
+                        </p>
+                      )}
                     </div>
 
                     {/* Batch Instructions Card */}

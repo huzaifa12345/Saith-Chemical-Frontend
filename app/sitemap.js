@@ -6,8 +6,28 @@ import {
   toAbsoluteImageUrl,
 } from '@/lib/images';
 
-/** Revalidate often so new products appear in sitemap without redeploy. */
-export const revalidate = 60;
+/** Always rebuild from live API so new products appear without redeploy. */
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+async function fetchAllProducts() {
+  const all = [];
+  let page = 1;
+  let pages = 1;
+
+  do {
+    const data = await getProducts(
+      { limit: 100, page, sortBy: 'created_at' },
+      { revalidate: 0, cache: 'no-store' }
+    );
+    const batch = data?.products || (Array.isArray(data) ? data : []);
+    if (Array.isArray(batch)) all.push(...batch);
+    pages = Number(data?.pagination?.pages) || 1;
+    page += 1;
+  } while (page <= pages && page <= 50);
+
+  return all;
+}
 
 export default async function sitemap() {
   const staticRoutes = [
@@ -30,12 +50,11 @@ export default async function sitemap() {
   let categoryRoutes = [];
 
   try {
-    const [productsData, categories] = await Promise.all([
-      getProducts({ limit: 500, page: 1 }, { revalidate: 60 }),
-      getCategories({ revalidate: 60 }),
+    const [products, categories] = await Promise.all([
+      fetchAllProducts(),
+      getCategories({ revalidate: 0, cache: 'no-store' }),
     ]);
 
-    const products = productsData.products || productsData || [];
     productRoutes = (Array.isArray(products) ? products : [])
       .filter((p) => p?.barcode || p?.id)
       .map((p) => {
@@ -45,7 +64,7 @@ export default async function sitemap() {
           lastModified: p.updatedAt || p.updated_at
             ? new Date(p.updatedAt || p.updated_at)
             : new Date(),
-          changeFrequency: 'weekly',
+          changeFrequency: 'daily',
           priority: 0.9,
           images: image ? [image] : undefined,
         };
@@ -59,8 +78,8 @@ export default async function sitemap() {
         changeFrequency: 'weekly',
         priority: 0.8,
       }));
-  } catch {
-    // Still return static routes if API is unreachable
+  } catch (err) {
+    console.error('[sitemap] Failed to load products/categories:', err?.message || err);
   }
 
   return [...staticRoutes, ...categoryRoutes, ...productRoutes];

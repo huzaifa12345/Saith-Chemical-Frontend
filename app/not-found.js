@@ -6,7 +6,8 @@ export const metadata = {
     absolute: 'Page Not Found | Saith Chemical',
   },
   description: 'The page you requested could not be found on Saith Chemical.',
-  robots: { index: false, follow: false },
+  // Do NOT set robots here — Next.js already injects noindex on HTTP 404.
+  // Setting it again creates duplicate tags (noindex + noindex,nofollow).
 };
 
 export default function NotFound() {

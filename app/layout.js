@@ -44,10 +44,8 @@ export const metadata = {
     description:
       'Premium home-care and cleaning chemical products across Pakistan.',
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  // Do not set robots here — it merges badly with not-found (duplicate noindex).
+  // Public pages are indexable by default; noindex pages set robots explicitly.
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },

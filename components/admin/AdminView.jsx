@@ -98,12 +98,15 @@ export default function AdminView() {
 
   const handleAddProduct = () => {
     setEditingProduct(null);
+    setUploadedImages([]);
     setProductForm({
       name: '',
       description: '',
       price: '',
       category_id: '',
       stock_quantity: '',
+      image_url: '',
+      images: [],
       status: 'active',
       barcode: '',
     });
@@ -122,8 +125,24 @@ export default function AdminView() {
 
   const handleEditProduct = (product) => {
     setEditingProduct(product);
+    const existingImages = Array.isArray(product.images)
+      ? product.images.filter(Boolean)
+      : [];
+    const cover = product.image_url || existingImages[0] || '';
+    const gallery = existingImages.length
+      ? existingImages
+      : cover
+        ? [cover]
+        : [];
+    // Ensure cover is first
+    const ordered = cover
+      ? [cover, ...gallery.filter((u) => u !== cover)]
+      : gallery;
+    setUploadedImages(ordered);
     setProductForm({
       ...product,
+      image_url: cover,
+      images: ordered,
       status: product.is_active ? 'active' : 'inactive',
     });
     setShowProductForm(true);
@@ -157,7 +176,30 @@ export default function AdminView() {
   };
 
   const removeUploadedImage = (index) => {
-    setUploadedImages((prev) => prev.filter((_, i) => i !== index));
+    setUploadedImages((prev) => {
+      const next = prev.filter((_, i) => i !== index);
+      setProductForm((form) => ({
+        ...form,
+        images: next,
+        image_url: next[0] || '',
+      }));
+      return next;
+    });
+  };
+
+  const setCoverImage = (index) => {
+    setUploadedImages((prev) => {
+      if (index < 0 || index >= prev.length) return prev;
+      const cover = prev[index];
+      const next = [cover, ...prev.filter((_, i) => i !== index)];
+      setProductForm((form) => ({
+        ...form,
+        images: next,
+        image_url: cover,
+      }));
+      toast.success('Cover image updated');
+      return next;
+    });
   };
 
   const handleSaveProduct = async () => {
@@ -166,7 +208,7 @@ export default function AdminView() {
         ...productForm,
         price: parseFloat(productForm.price),
         stock_quantity: parseInt(productForm.stock_quantity, 10),
-        image_url: uploadedImages[0] || productForm.image_url,
+        image_url: uploadedImages[0] || '',
         images: uploadedImages,
         is_active: productForm.status === 'active',
       };
@@ -407,6 +449,7 @@ export default function AdminView() {
             uploadingImages={uploadingImages}
             handleImageUpload={handleImageUpload}
             removeUploadedImage={removeUploadedImage}
+            setCoverImage={setCoverImage}
             handleSaveProduct={handleSaveProduct}
           />
         )}

@@ -18,7 +18,7 @@ import toast from 'react-hot-toast';
 import { useCart } from '@/context/CartContext';
 import ProductPageChrome from '@/components/product/ProductPageChrome';
 import { categoryPath } from '@/lib/slug';
-import { getCardImage } from '@/lib/images';
+import { getCardImage, optimizeImageUrl } from '@/lib/images';
 import '@/styles/ThemeHome.css';
 
 export default function HomeView({
@@ -130,9 +130,13 @@ export default function HomeView({
                 <div className="image-frame">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={slide.image}
+                    src={optimizeImageUrl(slide.image, { width: 1600 }) || slide.image}
                     className="hero-img"
                     alt="Saith Chemical Grace Plus dishwash bar and washing powder"
+                    width={1600}
+                    height={900}
+                    fetchPriority={currentSlide === 0 ? 'high' : 'auto'}
+                    loading={currentSlide === 0 ? 'eager' : 'lazy'}
                   />
                   <div className="floating-badge">
                     <FaStar /> <span>#1 in Lahore</span>

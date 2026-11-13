@@ -84,9 +84,7 @@ export default function AllProductsView({
         />
 
         <div className="container py-5">
-          <h1 className="h3 fw-bold mb-4 text-navy">
-            All Products – Saith Chemical
-          </h1>
+          <h1 className="h3 fw-bold mb-4 text-navy">All Products</h1>
           {loading ? (
             <div className="text-center py-5">
               <Loader2 className="animate-spin text-navy mx-auto" size={40} />

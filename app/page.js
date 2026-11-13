@@ -23,8 +23,10 @@ export const metadata = {
     locale: 'en_PK',
     images: [
       {
-        url: absoluteUrl('/SaithChemicalLogo.png'),
-        alt: `${SITE_NAME} logo`,
+        url: absoluteUrl('/og-default.jpg'),
+        width: 1200,
+        height: 630,
+        alt: HOME_TITLE,
       },
     ],
   },
@@ -32,7 +34,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: HOME_TITLE,
     description: HOME_DESC,
-    images: [absoluteUrl('/SaithChemicalLogo.png')],
+    images: [absoluteUrl('/og-default.jpg')],
   },
 };
 

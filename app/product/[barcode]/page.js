@@ -16,19 +16,33 @@ import '@/styles/ThemeProductDetail.css';
 export async function generateMetadata({ params }) {
   const { barcode } = await params;
 
+  let product = null;
+  let apiDown = false;
+
   try {
-    const { product } = await getProductPageData(barcode);
-    return buildProductMetadata(product, barcode);
+    const data = await getProductPageData(barcode);
+    product = data.product;
   } catch {
+    apiDown = true;
+  }
+
+  // Missing product → real 404 (do not wrap notFound() in try/catch)
+  if (!apiDown && !product) {
+    notFound();
+  }
+
+  if (apiDown || !product) {
     return {
       title: {
         absolute: 'Product | Saith Chemical',
       },
       description:
         'Browse premium home-care and cleaning products from Saith Chemical.',
-      robots: { index: false, follow: true },
+      robots: 'noindex, nofollow',
     };
   }
+
+  return buildProductMetadata(product, barcode);
 }
 
 export default async function ProductPage({ params }) {
@@ -46,7 +60,11 @@ export default async function ProductPage({ params }) {
     apiDown = true;
   }
 
-  if (apiDown) {
+  if (!apiDown && !product) {
+    notFound();
+  }
+
+  if (apiDown || !product) {
     return (
       <ProductPageChrome>
         <ProductApiUnavailable barcode={barcode} />
@@ -54,15 +72,10 @@ export default async function ProductPage({ params }) {
     );
   }
 
-  if (!product) {
-    notFound();
-  }
-
   const isAvailable = isProductAvailable(product);
 
   return (
     <>
-      {/* Phase 5: JSON-LD in initial HTML for crawlers / AI */}
       <ProductJsonLd
         product={product}
         reviews={reviews}
@@ -78,17 +91,14 @@ export default async function ProductPage({ params }) {
 
             <div className="col-lg-6">
               <article className="product-content-box">
-                {/* SSR: title, price, discount, stock status */}
                 <ProductInfoSSR
                   product={product}
                   reviews={reviews}
                   isAvailable={isAvailable}
                 />
 
-                {/* SSR: technical specs table (GEO / AEO) */}
                 <ProductSpecs product={product} isAvailable={isAvailable} />
 
-                {/* Client: qty + cart / buy now with stock_quantity gates */}
                 <ProductPurchaseActions
                   product={product}
                   isAvailable={isAvailable}
@@ -97,7 +107,6 @@ export default async function ProductPage({ params }) {
             </div>
           </div>
 
-          {/* Below buy buttons — FAQ then reviews */}
           <ProductFaq product={product} />
           <ProductReviews productId={product.id} initialReviews={reviews} />
         </main>
