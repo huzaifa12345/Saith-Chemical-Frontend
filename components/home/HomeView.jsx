@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  FaShoppingCart,
   FaTruck,
   FaShieldAlt,
   FaHeadset,
@@ -12,13 +11,13 @@ import {
   FaStar,
   FaChevronLeft,
   FaChevronRight,
-  FaSearch,
 } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import { useCart } from '@/context/CartContext';
 import ProductPageChrome from '@/components/product/ProductPageChrome';
+import CategoryProductSlider from '@/components/home/CategoryProductSlider';
 import { categoryPath } from '@/lib/slug';
-import { getCardImage, optimizeImageUrl } from '@/lib/images';
+import { optimizeImageUrl } from '@/lib/images';
 import '@/styles/ThemeHome.css';
 
 export default function HomeView({
@@ -173,77 +172,11 @@ export default function HomeView({
                 </Link>
               </div>
 
-              <div className="product-grid-modern">
-                {(productsByCategory[category.id] || []).map((product) => {
-                  const href = `/product/${product.barcode || product.id}`;
-                  const img = getCardImage(product);
-                  return (
-                    <div key={product.id} className="item-card">
-                      <Link href={href} className="item-thumb item-thumb-link">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={img} alt={product.name} loading="lazy" />
-                        {product.discount_price &&
-                          product.discount_price < product.price && (
-                            <div className="discount-badge-image">
-                              -
-                              {Math.round(
-                                ((product.price - product.discount_price) /
-                                  product.price) *
-                                  100
-                              )}
-                              %
-                            </div>
-                          )}
-                        <div className="item-overlay">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleAddToCart(product);
-                            }}
-                            className="circle-btn"
-                            aria-label="Add to cart"
-                          >
-                            <FaShoppingCart />
-                          </button>
-                          <span className="circle-btn" aria-hidden="true">
-                            <FaSearch />
-                          </span>
-                        </div>
-                      </Link>
-                      <div className="item-details">
-                        <h3 className="item-name">
-                          <Link href={href}>{product.name}</Link>
-                        </h3>
-                        <div className="item-pricing">
-                          {product.discount_price &&
-                          product.discount_price < product.price ? (
-                            <>
-                              <span className="price-original">
-                                Rs. {product.price}
-                              </span>
-                              <span className="price-now">
-                                Rs. {product.discount_price}
-                              </span>
-                            </>
-                          ) : (
-                            <span className="price-now">
-                              Rs. {product.price}
-                            </span>
-                          )}
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => handleBuyNow(product)}
-                          className="card-buy-btn"
-                        >
-                          Buy Now
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              <CategoryProductSlider
+                products={productsByCategory[category.id] || []}
+                onAddToCart={handleAddToCart}
+                onBuyNow={handleBuyNow}
+              />
             </div>
           ))}
         </section>
