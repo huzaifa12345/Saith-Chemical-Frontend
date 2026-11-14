@@ -56,7 +56,7 @@ export default function ProductInfoSSR({ product, reviews = [], isAvailable }) {
             : ''
         }
       >
-        {isAvailable ? 'In stock' : 'Out of stock'}
+        {isAvailable ? 'In Stock — Ready to Ship' : 'Currently Out of Stock'}
       </p>
 
       <div className="d-flex align-items-center gap-2 mb-3">
