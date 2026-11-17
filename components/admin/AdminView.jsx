@@ -36,6 +36,14 @@ export default function AdminView() {
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [productPage, setProductPage] = useState(1);
+  const [productPagination, setProductPagination] = useState({
+    total: 0,
+    page: 1,
+    limit: 25,
+    pages: 1,
+  });
+  const PRODUCTS_PER_PAGE = 25;
 
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -63,6 +71,25 @@ export default function AdminView() {
     { id: 'website-settings', name: 'Settings', icon: Settings },
   ];
 
+  const loadProducts = async (page = 1, search = '') => {
+    const productsRes = await themeApi.getProducts({
+      page,
+      limit: PRODUCTS_PER_PAGE,
+      include_inactive: true,
+      ...(search.trim() ? { search: search.trim() } : {}),
+    });
+    setProducts(productsRes.products || []);
+    const pagination = productsRes.pagination || {
+      total: productsRes.products?.length || 0,
+      page,
+      limit: PRODUCTS_PER_PAGE,
+      pages: 1,
+    };
+    setProductPagination(pagination);
+    setProductPage(pagination.page || page);
+    return productsRes;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       if (!isAuthenticated || !user) {
@@ -71,15 +98,28 @@ export default function AdminView() {
       }
       try {
         const [productsRes, categoriesRes, ordersRes] = await Promise.all([
-          themeApi.getProducts(),
+          themeApi.getProducts({
+            page: 1,
+            limit: PRODUCTS_PER_PAGE,
+            include_inactive: true,
+          }),
           themeApi.getCategories(),
           themeApi.getAllOrders(),
         ]);
         setProducts(productsRes.products || []);
+        setProductPagination(
+          productsRes.pagination || {
+            total: productsRes.products?.length || 0,
+            page: 1,
+            limit: PRODUCTS_PER_PAGE,
+            pages: 1,
+          }
+        );
+        setProductPage(1);
         setCategories(categoriesRes || []);
         setOrders(ordersRes.orders || []);
         setStats({
-          totalProducts: productsRes.products?.length || 0,
+          totalProducts: productsRes.pagination?.total ?? productsRes.products?.length ?? 0,
           totalOrders: ordersRes.orders?.length || 0,
           totalRevenue:
             ordersRes.orders?.reduce(
@@ -95,6 +135,18 @@ export default function AdminView() {
     };
     fetchData();
   }, [user, isAuthenticated]);
+
+  // Debounced server search + pagination for inventory tab
+  useEffect(() => {
+    if (!isAuthenticated || !user || activeTab !== 'products') return undefined;
+    const timer = setTimeout(() => {
+      loadProducts(productPage, searchTerm).catch(() => {
+        toast.error('Failed to load products');
+      });
+    }, searchTerm ? 300 : 0);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productPage, searchTerm, activeTab, isAuthenticated, user]);
 
   const handleAddProduct = () => {
     setEditingProduct(null);
@@ -155,10 +207,20 @@ export default function AdminView() {
     try {
       await themeApi.deleteProduct(id);
       toast.success('Product removed from active inventory');
-      setProducts((prev) => prev.filter((p) => p.id !== id));
+      const productsRes = await loadProducts(productPage, searchTerm);
+      setStats((prev) => ({
+        ...prev,
+        totalProducts:
+          productsRes.pagination?.total ?? Math.max(0, (prev.totalProducts || 1) - 1),
+      }));
     } catch {
       toast.error('Failed to delete product');
     }
+  };
+
+  const handleInventorySearch = (value) => {
+    setSearchTerm(value);
+    setProductPage(1);
   };
 
   const handleImageUpload = async (files) => {
@@ -221,8 +283,12 @@ export default function AdminView() {
       }
       setShowProductForm(false);
       setUploadedImages([]);
-      const productsRes = await themeApi.getProducts();
-      setProducts(productsRes.products || []);
+      const productsRes = await loadProducts(productPage, searchTerm);
+      setStats((prev) => ({
+        ...prev,
+        totalProducts:
+          productsRes.pagination?.total ?? prev.totalProducts,
+      }));
     } catch (error) {
       toast.error(
         'Save Failed: ' + (error.response?.data?.error || error.message)
@@ -407,10 +473,13 @@ export default function AdminView() {
                   <Products
                     products={products}
                     searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
+                    setSearchTerm={handleInventorySearch}
                     handleAddProduct={handleAddProduct}
                     handleEditProduct={handleEditProduct}
                     handleDeleteProduct={handleDeleteProduct}
+                    pagination={productPagination}
+                    currentPage={productPage}
+                    onPageChange={setProductPage}
                   />
                 )}
                 {activeTab === 'categories' && (
